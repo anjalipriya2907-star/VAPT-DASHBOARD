@@ -27,7 +27,25 @@ st.set_page_config(
 # LOAD DATA
 # ===================================================
 
+
 executive_df, tracking_df, history_df, remediation_df = load_excel()
+
+# If no report is available, allow only Report Ingestion page
+if executive_df is None:
+
+    with st.sidebar:
+
+        st.title("🛡️ VAPT Dashboard")
+
+        selected = option_menu(
+            menu_title="Navigation",
+            options=["Report Ingestion"],
+            icons=["cloud-upload"],
+            default_index=0
+        )
+
+    show_upload_center()
+    st.stop()
 
 # ===================================================
 # SIDEBAR

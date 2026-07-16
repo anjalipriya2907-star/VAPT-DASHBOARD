@@ -1,12 +1,13 @@
+import os
 import streamlit as st
 import pandas as pd
 
 
 def load_excel():
 
-    # -------------------------------------------------
+    # -----------------------------------------
     # Use uploaded data if available
-    # -------------------------------------------------
+    # -----------------------------------------
 
     if (
         "tracking_df" in st.session_state
@@ -22,39 +23,45 @@ def load_excel():
             st.session_state["remediation_df"]
         )
 
-    # -------------------------------------------------
-    # Load default Excel file
-    # -------------------------------------------------
+    # -----------------------------------------
+    # Load default Excel (only if it exists)
+    # -----------------------------------------
 
     file = "data/VAPT_Report.xlsx"
 
-    # Executive Summary
-    executive_df = pd.read_excel(
-        file,
-        sheet_name="Executive Summary"
-    )
+    if os.path.exists(file):
 
-    # Vulnerability Tracking
-    tracking_df = pd.read_excel(
-        file,
-        sheet_name="Vulnerability Tracking"
-    )
+        executive_df = pd.read_excel(
+            file,
+            sheet_name="Executive Summary"
+        )
 
-    # Scan History
-    history_df = pd.read_excel(
-        file,
-        sheet_name="Scan History"
-    )
+        tracking_df = pd.read_excel(
+            file,
+            sheet_name="Vulnerability Tracking"
+        )
 
-    # Remediation Progress
-    remediation_df = pd.read_excel(
-        file,
-        sheet_name="Remediation Progress"
-    )
+        history_df = pd.read_excel(
+            file,
+            sheet_name="Scan History"
+        )
 
-    return (
-        executive_df,
-        tracking_df,
-        history_df,
-        remediation_df
-    )
+        remediation_df = pd.read_excel(
+            file,
+            sheet_name="Remediation Progress"
+        )
+
+        return (
+            executive_df,
+            tracking_df,
+            history_df,
+            remediation_df
+        )
+
+    # -----------------------------------------
+    # No default report found
+    # -----------------------------------------
+
+    st.info("📂 Please upload a VAPT report from the Report Ingestion page.")
+
+    return None, None, None, None
